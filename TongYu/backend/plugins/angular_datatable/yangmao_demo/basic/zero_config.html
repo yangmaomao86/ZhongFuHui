@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="app">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<link href="../../../datatables/bootstrap.css" rel="stylesheet" />
+	<!--<link href="../../styles/main.css" rel="stylesheet" />-->
+	<script src="../../../jQuery/jQuery-2.1.4.min.js"></script>
+	<script src="../../../datatables/jquery.dataTables.js"></script>
+	<link href="../../dist/css/angular-datatables.css" rel="stylesheet" />
+	<script src="../../../angular/angular.js"></script>
+	<script src="../../dist/angular-datatables.js"></script>
+	<style type="text/css">
+		.dataTables_paginate paging_simple_numbers{
+			float:right;
+			display:inline-block;
+		}
+		.dataTables_info{
+			float:left;
+		}
+	</style>
+	<script type="text/javascript">
+		angular.module('app', ['datatables']);
+	</script>
+	<!--<script src="../../demo/app.js"></script>-->
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<table datatable="" class="table row-border hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>First name</th>
+							<th>Last name</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Foo</td>
+							<td>Bar</td>
+						</tr>
+						<tr>
+							<td>123</td>
+							<td>Someone</td>
+							<td>Youknow</td>
+						</tr>
+						<tr>
+							<td>987</td>
+							<td>Iamout</td>
+							<td>Ofinspiration</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>

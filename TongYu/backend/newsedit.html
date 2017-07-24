@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>编辑新闻</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link href="/backend/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/backend/plugins/umeditor_net/themes/default/css/umeditor.css" rel="stylesheet" />
+    <script src="/backend/plugins/umeditor_net/third-party/jquery.min.js"></script>
+    <script src="plugins/umeditor_net/third-party/mathquill/mathquill.min.js"></script>
+    <script src="/backend/plugins/umeditor_net/umeditor.config.js"></script>
+    <script src="/backend/plugins/umeditor_net/umeditor.min.js"></script>
+    <script src="/backend/plugins/umeditor_net/lang/zh-cn/zh-cn.js"></script>
+    <script src="/backend/plugins/myjs/mylib.js"></script>
+    <link href="plugins/layer-v2.2/layer/skin/layer.css" rel="stylesheet" />
+    <script src="plugins/layer-v2.2/layer/layer.js"></script>
+</head>
+<body>
+    <div class="container">
+        <section class="content">
+            <div class="box box-solid">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <div class="form-inline">
+                            新闻发布     <!--<a class="btn btn-primary" href="#/dongtailist">返回列表</a>-->
+                        </div>
+                    </h3>
+                </div>
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form>
+                                <div class="form-group">
+                                    <label for="newsTitle">新闻标题</label>
+                                    <input type="text" class="form-control" id="newsTitle" style="width: 752px;" placeholder="标题" />
+                                </div><div class="form-group">
+                                    <label for="newsTitle">新闻类型</label>
+                                      <select   class="form-control"  id="newsType"   style="width: 752px;" ></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>新闻内容</label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <!--<label>封面图</label>
+
+                            <div id="drag-and-drop-zone" class="uploader">
+                                <div>拖动图片到此位置</div>
+                                <div class="or">-或者-</div>
+                                <div class="browser">
+                                    <label>
+                                        <span>点击此按钮选择文件</span>
+                                        <input type="file" name="files" title='点击添加文件'>
+                                    </label>
+                                </div>
+                            </div>-->
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--style给定宽度可以影响编辑器的最终宽度-->
+                            <script type="text/plain" id="myEditor" style="width:100%;height:240px;"></script>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label></label>
+                                <button class="btn btn-primary btn-block" onclick="ReleaseNews()">发布</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="loading" style="left: 45%; top : 40% ; background : fixed ; z-index:1000; position: absolute; display: none;">
+                <img src="/backend/images/load_gif.gif" />
+            </div>
+        </section>
+    </div>
+
+
+
+    <script type="text/javascript">
+        //实例化编辑器
+        var newsid = 0;
+        var news_img = "";
+        var mode = "";
+        var um;
+
+        function getContent() {
+            var arr = [];
+            arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+            arr.push("内容为：");
+            arr.push(UM.getEditor('myEditor').getContent());
+            alert(arr.join("\n"));
+        }
+        function myalert(msg, callback) {
+            layer.alert(msg, { title: "提示" }, function (alertIndex) {
+                //alert("execute callback functions");
+                if (callback) {
+                    callback();
+                }
+                layer.close(alertIndex);
+            });
+        }
+        function mymsg(msg) {
+            layer.msg(msg, { time: 3000, icon: 8, shift: 6 });
+        }
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+        function loadNewsById(id) {
+            ajax("/api/News/get_news", { id: id }, function(res) {
+                console.log(res);
+                if (res !== null) {
+                    var current_new = res;
+                    console.log(current_new);
+                    newsid = current_new.id;
+                    if (current_new.title !== null && current_new.title !== undefined) {
+                        $("#newsTitle").val(current_new.title);
+                    }
+                    $("#newsType").val(current_new.newstypeid);
+                    if (current_new.newscontent !== null && current_new.newscontent !== undefined) {
+                        UM.getEditor('myEditor').setContent(current_new.newscontent);
+                    }
+                }
+            });
+        }
+
+        function ReleaseNews() {
+            var newsTitle = $.trim($("#newsTitle").val());
+            if (newsTitle == undefined || newsTitle === "" || newsTitle === null) {
+                mymsg("新闻标题必填！");
+                return;
+            }
+            var newsContent = $.trim(UM.getEditor('myEditor').getContent());
+            if (newsContent == undefined || newsContent === "" || newsContent === null) {
+                mymsg("新闻内容必填！");
+                return;
+            }
+            var newsType = $.trim($("#newsType").val());
+            var author = localStorage.getItem("backend_employeename");
+            ajax("/api/News/add_news", { title: newsTitle, newscontent: newsContent, id: newsid, author: author, newstypeid: newsType }, function (res) {
+                console.log(res);
+                if (res === 1) {
+                    mymsg("发布成功！");
+                    $("#newsTitle").val("");
+                    UM.getEditor('myEditor').setContent("");
+                    newsid = 0; //一定要清空这个newsid
+                } else {
+                    mymsg("发布失败！");
+                }
+            });
+        }
+
+        $(function () {
+
+            var index1 = location.href.indexOf("dongtaiid");
+            if (index1 > -1) {
+                var index2 = location.href.indexOf("&", index1);
+                newsid = location.href.substr(index1 + 10, index2 - (index1 + 10));
+                //console.log(newsid);
+            }
+            //
+            ajax("/api/Newstype/list", "", function(res) {
+                $.each(res, function(index, item) {
+                    $("#newsType").append("<option value='" + item.id + "'>" + item.newstypename + "</option>");
+                });
+            });
+
+            if (newsid === "") {
+                mode = "add";
+                newsid = 0;
+            } else {
+                console.log(newsid);
+                mode = "edit";
+                loadNewsById(newsid);
+            }
+            console.log("mode is ", mode);
+        });
+
+    </script>
+
+    <script type="text/javascript">
+        //实例化编辑器
+        var um = UM.getEditor('myEditor');
+
+        //只需要这个方法就能获取到内容了！
+
+        function setContent(isAppendTo) {
+            var arr = [];
+            arr.push("使用editor.setContent('欢迎使用umeditor')方法可以设置编辑器的内容");
+            UM.getEditor('myEditor').setContent('欢迎使用umeditor', isAppendTo);
+            alert(arr.join("\n"));
+
+
+        }
+    </script>
+</body>
+</html>

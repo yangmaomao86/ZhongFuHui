@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<link href="layer/skin/layer.css" rel="stylesheet" />
+	<script src="../jQuery/jQuery-2.1.4.min.js"></script>
+	<script src="layer/layer.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$("#btn1").click(function () {
+				layer.alert("弹出alert信息", { title: "提示" }, function (alertIndex) {
+
+					alert("execute callback functions");
+
+					layer.close(alertIndex);
+				});
+			});
+
+			$("#btn2").click(function () {
+				layer.msg("修改成功！");
+			});
+
+			$("#btn3").click(function () {
+				layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 3000, icon: 8 });
+			});
+		});
+	</script>
+</head>
+<body>
+
+	<button id="btn1" type="button">click me alert box</button>
+
+	<button id="btn2" type="button">msg tips</button>
+
+	<button id="btn3" type="button">msg disapper in 3s</button>
+</body>
+</html>

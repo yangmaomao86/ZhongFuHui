@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+
+	<!-- Bootstrap -->
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" />
+
+	<link rel="stylesheet" href="../demos/css/uploader.css" type="text/css" />
+	<link rel="stylesheet" href="../demos/css/demo.css" type="text/css" />
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body role="document">
+
+
+
+	<div class="container demo-wrapper">
+
+		<div class="row">
+			<div class="col-md-6">
+
+				<div id="drag-and-drop-zone" class="uploader">
+					<div>将文件拖放至此</div>
+					<div class="or">--或者--</div>
+					<div class="browser">
+						<label>
+							<span>点击添加文件</span>
+							<input type="file" name="files[]" multiple="multiple" title='点击添加文件' />
+						</label>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">调试信息 (id='demo-debug')</h3>
+					</div>
+					<div class="panel-body demo-panel-debug">
+						<ul id="demo-debug">
+						</ul>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">文件上传结果 ( id='demo-files')</h3>
+					</div>
+					<div class="panel-body demo-panel-files" id='demo-files'>
+						<span class="demo-note">没有文件被上传...</span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<script src="js/jquery-1.10.1.min.js"></script>
+	<script src="js/jquery-migrate-1.2.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script> -->
+
+
+	<script src="js/demo.js"></script>
+	<!--<script src="../src/dmuploader.min.js"></script>-->
+	<script src="../src/dmuploader_my.js"></script>
+
+	<script type="text/javascript">
+		$('#drag-and-drop-zone').dmUploader({
+			url: 'UploadHandler.ashx?currentUserID=18',
+			dataType: 'json',
+			//allowedTypes: 'image/*',
+			/*extFilter: 'jpg;png;gif',*/
+			extFilter: 'jpg;png;gif;jpeg;pdf',
+			maxFileSize: 20971520,  //最大容许上传文件大小为 20MB
+			onInit: function () {
+				$.danidemo.addLog('#demo-debug', 'default', '插件初始化成功');
+			},
+			onBeforeUpload: function (id) {
+				$.danidemo.addLog('#demo-debug', 'default', '开始上传第 ' + (id+1)+" 个文件");
+
+				$.danidemo.updateFileStatus(id, 'default', '正在上传...');
+			},
+			onNewFile: function (id, file) {
+				$.danidemo.addFile('#demo-files', id, file);
+			},
+			onComplete: function () {
+				$.danidemo.addLog('#demo-debug', 'default', '所有挂起的任务都已完成！');
+			},
+			onUploadProgress: function (id, percent) {
+				var percentStr = percent + '%';
+
+				$.danidemo.updateFileProgress(id, percentStr);
+			},
+			onUploadSuccess: function (id, data) {
+				$.danidemo.addLog('#demo-debug', 'success', '上传文件id为 #' + id + ' completed');
+
+				$.danidemo.addLog('#demo-debug', 'info', '服务器返回文件id为 #' + id + ': ' + JSON.stringify(data));
+
+				$.danidemo.updateFileStatus(id, 'success', '上传成功！');
+
+				$.danidemo.updateFileProgress(id, '100%');
+			},
+			onUploadError: function (id, message) {
+				$.danidemo.updateFileStatus(id, 'error', message);
+
+				$.danidemo.addLog('#demo-debug', 'error', 'Failed to Upload file #' + id + ': ' + message);
+			},
+			onFileTypeError: function (file) {
+				$.danidemo.addLog('#demo-debug', 'error', 'File \'' + file.name + '\' cannot be added: must be an image or pdf file!');
+			},
+			onFileSizeError: function (file) {
+				$.danidemo.addLog('#demo-debug', 'error', 'File \'' + file.name + '\' cannot be added: size excess limit');
+			},
+			/*onFileExtError: function(file){
+			  $.danidemo.addLog('#demo-debug', 'error', 'File \'' + file.name + '\' has a Not Allowed Extension');
+			},*/
+			onFallbackMode: function (message) {
+				$.danidemo.addLog('#demo-debug', 'info', '浏览器不支持！' + message);
+			}
+		});
+    </script>
+
+</body>
+</html>

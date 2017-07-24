@@ -1,0 +1,118 @@
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+
+div {
+    padding: 0px;
+    margin: 0px;
+}
+
+.wrapper {
+    width: 760px;
+    margin: auto;
+}
+
+.left-column {
+    float: left;
+    width: 410px;
+    height: 230px;
+}
+
+h1 {
+    color: #333;
+}
+
+    h1 a {
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+
+
+/*
+ * File list
+ */
+#fileList {
+    float: right;
+    width: 330px;
+    height: 196px;
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    color: gray;
+    font-size: 12px;
+    overflow: auto;
+}
+
+    #fileList .file {
+        width: 290px;
+        margin-bottom: 15px;
+    }
+
+    #fileList .info {
+        width: 290px;
+        height: 26px;
+        display: block;
+        overflow: hidden;
+        line-height: 13px;
+    }
+
+    #fileList .filename {
+        font-weight: bold;
+    }
+
+    #fileList .bar {
+        border: solid 1px #C0C0C0;
+        height: 12px;
+        margin-top: 5px;
+        padding: 1px;
+        width: 290px;
+    }
+
+    #fileList .progress {
+        height: 12px;
+        background-color: #00CCFF;
+    }
+
+    #fileList span.success {
+        color: #009900;
+    }
+
+    #fileList span.error {
+        color: #990000;
+    }
+
+/* Debug */
+#debug {
+    clear: both;
+    padding-top: 15px;
+    color: #333;
+}
+
+    #debug h2 {
+        margin: 0px;
+        border-bottom: 1px solid #e5e5e5;
+        padding-bottom: 20px;
+        color: #333;
+    }
+
+    #debug div {
+        height: 150px;
+        width: 100%;
+        overflow: auto;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+
+    #debug ul {
+        padding: 0px 0px 0px 20px;
+        font-size: 12px;
+    }
+
+    #debug li {
+        padding: 0px;
+        margin: 0px 0px 7px 0px;
+    }
+

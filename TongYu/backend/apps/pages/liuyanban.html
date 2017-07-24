@@ -1,0 +1,55 @@
+﻿<style type="text/css">
+    th.header, td.ng-binding {
+        text-align: left;
+    }
+
+    .ng-scope td {
+        text-align: left;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        留言板
+                    </h3>&nbsp;&nbsp;
+                    <!--<a href="/handler/ExcelOut.aspx?page=bankcardlist" class="btn btn-primary">导出Excel</a>-->
+                </div>
+                <div class="box-body">
+                    <table ng-table="tableParams" class="table" show-filter="false">
+                        <tr ng-repeat="e in $data">
+                            <td title="'姓名'" style="text-align: left; width: 100px; ">
+                                {{e.messagename}}
+                            </td>
+                            <td title="'留言'" style="text-align: left;">
+                                <!--<span title="{{e.Messagecontent}}">{{concentsplit(e.Messagecontent)}}</span>-->
+                                {{e.Messagecontent}}
+                            </td>
+                            <td title="'电话'" style="text-align: left;">
+                                {{e.mobile}}
+                            </td>
+                            <td title="'Email'" style="text-align: left; ">
+                                {{e.email}}
+                            </td>
+                            <td title="'创建时间'" style="text-align: left; " sortable="'createdate'">
+                                {{e.createdate.replace("T"," ").substr(0,19)}}
+                            </td>
+                            <td title="'操作'" style="text-align: left; ">
+                                <button type="button" class="btn btn-primary" ng-click="deleteliuyanban(e)">删除</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+
+<div ng-show="loading" style="left: 45%; top: 30%; background: fixed; z-index: 1000; position: absolute;">
+    <img src="/backend/images/load_gif.gif" />
+</div>

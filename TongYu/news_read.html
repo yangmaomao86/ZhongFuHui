@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <title>统御</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/jquery.bxslider.css" rel="stylesheet">
+    <link href="css/global.css" rel="stylesheet">
+    <link href="js/layer/skin/layer.css" rel="stylesheet" />
+    <script src="Scripts/vue.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <header class="navbar-fixed-top" id="topapp">
+        <div class="top-text">
+            <div class="container">
+                <i class="fa fa-envelope-o"></i>market@tongyuinfo.com &nbsp;&nbsp;<i class="fa fa-mobile-phone"></i>021-23051515 <span class="divider">|</span>{{masagedate}}
+            </div>
+        </div>
+        <nav class="navbar">
+            <!-- We use the fluid option here to avoid overriding the fixed width of a normal container within the narrow content columns. -->
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"></a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="index.html" class="hvr-overline-from-left">首页</a></li>
+                        <li><a href="index.html" class="hvr-overline-from-left">关于统御</a></li>
+                        <li><a href="index.html" class="hvr-overline-from-left">我们的团队</a></li>
+                        <li><a href="index.html#productapp">产品与服务</a></li>
+                        <li><a href="index.html#companyapp">案例展示</a></li>
+                        <li><a href="index.html#cooperativeapp">合作伙伴</a></li>
+                        <li><a href="index.html#joinapp">加入我们</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="banner" style="display: none;">
+        <ul>
+            <li><img src="images/banner_1.jpg" alt="" /></li>
+        </ul>
+        <div class="popover right">
+            <div class="arrow"></div>
+            <div class="popover-content">
+                <h3>
+                    统御信息技术<br />
+                    <small>没有完美的人</small>
+                    <br />
+                    只有完善的团队
+                </h3>
+                <div class="text-right"><a href="index.html" class="btn btn-primary">了解详情</a></div>
+            </div>
+        </div>
+    </div>
+    <div id="newscontent">
+        <div class="dynamic-list">
+            <div class="container">
+                <div class="search" style="display: none;">
+                    <div class="input-group">
+                        <input class="form-control" id="inputsearchcontent" placeholder="请输入关键字" type="text">
+                        <span class="input-group-btn">
+                            <a href="javascript:searchhtml();" class="btn btn-default">搜索</a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="content">
+
+
+                    <!--news detail area-->
+
+                    <div class="info-content" id="divnewslistsearch">
+                        <div class="article-head">
+                            <h4 id="divNewsTitle">{{newsobj.title}}</h4>
+                            <p>
+                                <small>
+                                    <span id="divCreator">admin</span>
+                                    <span id="divCreateTime">{{(newsobj.createdate)}}</span>
+                                    <span>{{newsobj.newstypename}}</span>
+                                </small>
+                            </p>
+                        </div>
+                        <div class="img-md">
+                            <!--<img id="imgNews" src="images/banner_1.jpg" alt="" />
+                            <img id="imgNews" src="/uploaded_news_img/20170613182539_147.jpg" alt="" style="width:100%; display:none;">-->
+                        </div>
+                        <article id="divNewsContent" v-html="newsobj.newscontent"></article>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <footer id="footerapp">
+        <div class="container">
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-5">
+                        <dl class="fa-sm">
+                            <dt>联系我们</dt>
+                            <dd>
+                                <i class="fa fa-phone"></i>
+
+                                <div class="text">
+                                    <span>PHONE</span>
+
+                                    <p>021-88888888</p>
+                                </div>
+                            </dd>
+                            <dd>
+                                <i class="fa fa-map-marker"></i>
+
+                                <div class="text">
+                                    <span>ADDRESS</span>
+
+                                    <p>地址：上海市长宁区中山西路</p>
+                                </div>
+                            </dd>
+                            <dd>
+                                <i class="fa fa-envelope-o"></i>
+
+                                <div class="text">
+                                    <span>EMAIL</span>
+
+                                    <p>ingo@hotmail.com</p>
+                                </div>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-7">
+                        <dl>
+                            <dt>留言给我们</dt>
+                            <dd>
+                                <form>
+                                    <textarea class="form-control" rows="3" placeholder="留言" v-model="Messagecontent"></textarea>
+                                    <input type="text" class="form-control" placeholder="姓名*" v-model="messagename" />
+                                    <input type="text" class="form-control" placeholder="电话*" v-model="mobile" />
+                                    <input type="text" class="form-control" placeholder="邮箱" v-model="email" />
+
+                                    <p class="text-right">
+                                        <transition>
+                                            <button v-if="showd==='opend'" key="opend" type="button" class="btn" v-on:click="tijiao()">提交</button>
+                                            <button v-if="showd==='closed'" key="closed" type="button" class="btn" style="letter-spacing:5px;">正在提交中</button>
+                                        </transition>
+                                    </p>
+                                </form>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-text">
+            <div class="container">
+                <span> 2017  tongyu   &nbsp; <a href="/backend/login.html">后台管理</a></span>
+                <ul class="list-inline">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">关于统御</a></li>
+                    <li><a href="#">我们的团队</a></li>
+                    <li><a href="index.html#productapp">产品与服务</a></li>
+                    <li><a href="index.html#companyapp">案例展示</a></li>
+                    <li><a href="index.html#cooperativeapp">合作伙伴</a></li>
+                    <li><a href="index.html#joinapp">加入我们</a></li>
+                </ul>
+                <a href="javascript:;" class="back-top"></a>
+            </div>
+        </div>
+    </footer>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.vector-map.js"></script>
+    <script src="js/china-zh.js"></script>
+    <script src="js/jquery.imageScroll.min.js"></script>
+    <script src="js/jquery.bxslider.min.js"></script>
+    <script src="js/docs.js"></script>
+    <script src="js/layer/layer.js"></script>
+    <script src="backend/plugins/underscore/underscore-min.js"></script>
+    <script type="text/javascript">
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+        function mymsg(msg) {
+            layer.msg(msg, { time: 3000, icon: 8, shift: 6 });
+        }
+        var id = getUrlParam("id");
+        console.log(id);
+
+        var topapp = new Vue({
+            el: "#topapp",
+            computed: {
+                masagedate: function () {
+                    var d = new Date();
+                    var today = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+                    var month = (d.getMonth() + 1).toString().length === 1 ? "0" + (d.getMonth() + 1) : (d.getMonth() + 1);
+                    var time = d.getFullYear() + "年" + month + "月" + d.getDate() + "日" + "  " + today[d.getDay()];
+                    return time;
+                }
+            }
+        });
+
+        var newsDetail = new Vue({
+            el: "#divnewslistsearch",
+            data: {
+                newsobj: {}
+            },
+            computed: {
+                format_date: function () {
+                    return newsDetail.newsobj.createdate.substr(0, 19).replace("T", " ");
+                }
+            },
+            methods: {
+                newsclick: function (id) {
+
+                }
+            }
+        });
+        $.ajax({
+            url: '/api/News/get_news_by_id',
+            type: 'POST',
+            data: { "": id },
+            dataType: "json",
+            timeout: 50000,
+            success: function (res) {
+                console.log(res);
+                res.createdate = res.createdate.replace("T", " ").substr(0, 19);
+                newsDetail.newsobj = res;
+
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+        var footerapp = new Vue({
+            el: "#footerapp",
+            data: {
+                Messagecontent: "",
+                messagename: "",
+                mobile: "",
+                email: "",
+                showd: "opend"
+            },
+            methods: {
+                tijiao: function () {
+                    var that = this;
+                    this.showd = "closed";
+                    try {
+                        if (this.messagename === null || this.messagename === "" || this.messagename === undefined) {
+                            layer.alert("姓名不能为空！");
+                            return false;
+                        }
+                        if (this.mobile === null || this.mobile === "" || this.mobile === undefined) {
+                            layer.alert("电话不能为空！");
+                            return false;
+                        }
+                        var datas = { Messagecontent: this.Messagecontent, messagename: this.messagename, mobile: this.mobile, email: this.email };
+                        console.log(datas);
+                        $.ajax({
+                            url: '/api/Message/employee_mobile',
+                            type: 'POST',
+                            contentType: 'application/json;charset=utf-8',
+                            data: JSON.stringify(datas),
+                            timeout: 50000,
+                            success: function (res) {
+                                console.log(res);
+                                if (res === 1) {
+                                    mymsg("感谢您的参与！");
+
+                                    that.Messagecontent = "";
+                                    that.messagename = "";
+                                    that.mobile = "";
+                                    that.email = "";
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    } catch (err) {
+                        // document.getElementById("demo").innerHTML = err.message;
+                    } finally {
+                        this.showd = "opend";
+                    }
+
+                }
+            }
+        });
+    </script>
+</body>
+</html>

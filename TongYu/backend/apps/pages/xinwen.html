@@ -1,0 +1,60 @@
+﻿<style type="text/css">
+    th.header,td.ng-binding {
+        text-align: left;
+    }
+    .ng-scope td {
+        text-align: left;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        新闻列表
+                    </h3>&nbsp;&nbsp;
+                    <a href="newsedit.html" class="btn btn-primary" target="_blank">添加</a>
+                </div>
+                <div class="box-body">
+                    <table ng-table="tableParams" class="table" show-filter="false">
+                        <tr ng-repeat="e in $data">
+                            <td title="'新闻标题'" style="text-align: left;">
+                                {{e.title}}
+                            </td>
+                            <td title="'新闻类型'" style="text-align: left;">
+                                {{ get_type(e.newstypeid)}}
+                            </td>
+                            <td title="'作者'" style="text-align: left;">
+                                {{e.author}}
+                            </td>
+                            <td title="'创建时间'" style="text-align: left;">
+                                {{e.createdate}}
+                            </td>
+                            <td title="'操作'" style="text-align: left;">
+                                <a href="newsedit.html?dongtaiid={{e.id}}&xxx=tempccc" class="btn btn-primary" target="_blank">修改</a>
+                                <button type="button" class="btn btn-primary" ng-click="deletedaxinwen(e)">删除</button>
+                            </td>
+                            <!--<td>
+                <button class="btn btn-primary" ng-click="EditEmployee(e)">编辑</button>&nbsp;&nbsp;
+                <button class="btn btn-danger" ng-click="DeleteEmployee(e)" ng-show="current_user==='admin'">删除</button>
+            </td>
+            <td>
+                <label ng-show="e.EmployeeName==='admin'">超级管理员</label>
+            </td>-->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+
+<div ng-show="loading" style="left: 45%; top: 30%; background: fixed; z-index: 1000; position: absolute;">
+    <img src="/backend/images/load_gif.gif"/>
+</div>
+
+

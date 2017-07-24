@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daniel.uy - Online Code Demos</title>
+    <link href="../src/css.css" rel="stylesheet"/>
+    <style type="text/css">
+        body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+
+div {
+    padding: 0px;
+    margin: 0px;
+}
+
+.wrapper {
+    width: 760px;
+    margin: auto;
+}
+
+.left-column {
+    float: left;
+    width: 410px;
+    height: 230px;
+}
+
+h1 {
+    color: #333;
+}
+
+    h1 a {
+        font-weight: normal;
+        font-size: 14px;
+    }
+
+
+
+/*
+ * File list
+ */
+#fileList {
+    float: right;
+    width: 330px;
+    height: 196px;
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    color: gray;
+    font-size: 12px;
+    overflow: auto;
+}
+
+    #fileList .file {
+        width: 290px;
+        margin-bottom: 15px;
+    }
+
+    #fileList .info {
+        width: 290px;
+        height: 26px;
+        display: block;
+        overflow: hidden;
+        line-height: 13px;
+    }
+
+    #fileList .filename {
+        font-weight: bold;
+    }
+
+    #fileList .bar {
+        border: solid 1px #C0C0C0;
+        height: 12px;
+        margin-top: 5px;
+        padding: 1px;
+        width: 290px;
+    }
+
+    #fileList .progress {
+        height: 12px;
+        background-color: #00CCFF;
+    }
+
+    #fileList span.success {
+        color: #009900;
+    }
+
+    #fileList span.error {
+        color: #990000;
+    }
+
+/* Debug */
+#debug {
+    clear: both;
+    padding-top: 15px;
+    color: #333;
+}
+
+    #debug h2 {
+        margin: 0px;
+        border-bottom: 1px solid #e5e5e5;
+        padding-bottom: 20px;
+        color: #333;
+    }
+
+    #debug div {
+        height: 150px;
+        width: 100%;
+        overflow: auto;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+
+    #debug ul {
+        padding: 0px 0px 0px 20px;
+        font-size: 12px;
+    }
+
+    #debug li {
+        padding: 0px;
+        margin: 0px 0px 7px 0px;
+    }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <h1>Simple Demo</h1>
+
+        <div class="left-column">
+            <!-- 可以拖动文件上传区域 -->
+            <div id="drag-and-drop-zone" class="uploader">
+                <div>拖动图片到此位置</div>
+                <div class="or">-或者-</div>
+                <div class="browser">
+                    <label>
+                        <span>点击此按钮选择文件</span>
+                        <!--<input type="file" name="files[]" multiple="multiple" title='点击添加文件'>-->
+                        <input type="file" name="files"  title='点击添加文件'>
+                    </label>
+                </div>
+            </div>
+            <!-- /可以拖动文件上传区域！ -->
+        </div>
+
+        <div id="fileList">
+
+            <!-- 上传后的文件会显示在这里 -->
+        </div>
+
+        <div id="debug">
+            <h2>调试</h2>
+            <div>
+                <ul>
+                    <!-- debug的信息会显示在这里 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/jquery-1.10.1.min.js"></script>
+    <script src="../src/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="../src/dmuploader.min.js"></script>
+    <script type="text/javascript">
+
+        //-- Some functions to work with our UI
+        function add_log(message) {
+            var template = '<li>[' + new Date().getTime() + '] - ' + message + '</li>';
+            $('#debug').find('ul').prepend(template);
+        }
+
+        function add_file(id, file) {
+            var template = '' +
+              '<div class="file" id="uploadFile' + id + '">' +
+                '<div class="info">' +
+                  '#'+id+' - <span class="filename" title="大小: ' + file.size + '字节 - 文件类型: ' + file.type + '">' + file.name + '</span><br /><small>状态: <span class="status">等待中</span></small>' +
+                '</div>' +
+                '<div class="bar">' +
+                  '<div class="progress" style="width:0%"></div>' +
+                '</div>' +
+              '</div>';
+
+            $('#fileList').prepend(template);
+        }
+
+        function update_file_status(id, status, message) {
+            $('#uploadFile' + id).find('span.status').html(message).addClass(status);
+        }
+
+        function update_file_progress(id, percent) {
+            $('#uploadFile' + id).find('div.progress').width(percent);
+        }
+
+        // Upload Plugin itself
+        $('#drag-and-drop-zone').dmUploader({
+            url: '../src/upload.php',
+            dataType: 'json',
+            allowedTypes: 'image/*',
+            extFilter: 'jpg;png;gif',
+            onInit: function () {
+                add_log('插件初始化 :)');
+            },
+            onBeforeUpload: function (id) {
+                add_log('开始上传第 #' + id);
+                update_file_status(id, 'uploading', '上传中...');
+            },
+            onNewFile: function (id, file) {
+                add_log('添加新文件到队列 #' + id);
+
+                add_file(id, file);
+            },
+            onComplete: function () {
+                add_log('所有挂起队列已完成！');
+            },
+            onUploadProgress: function (id, percent) {
+                var percentStr = percent + '%';
+                update_file_progress(id, percentStr);
+            },
+            onUploadSuccess: function (id, data) {
+                add_log('上传文件 #' + id + ' 成功！');
+                add_log('服务器返回： #' + id + ': ' + JSON.stringify(data));
+                update_file_status(id, 'success', '上传完成');
+                update_file_progress(id, '100%');
+            },
+            onUploadError: function (id, message) {
+                add_log('上传文件失败 #' + id + ': ' + message);
+                update_file_status(id, 'error', message);
+            },
+            onFileTypeError: function (file) {
+                add_log( file.name + '\' 必须是图片！');
+            },
+            onFileSizeError: function (file) {
+                add_log(  file.name + '\' 超出最大上传文件大小!');
+            },
+            onFileExtError: function(file){
+                add_log(file.name + " 文件扩展名不符合条件！");
+            },
+            onFallbackMode: function (message) {
+                console.log('浏览器不支持 : ' + message);
+            }
+        });
+    </script>
+</body>
+</html>

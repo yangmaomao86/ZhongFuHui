@@ -1,0 +1,110 @@
+﻿		*{
+			margin:0;
+			padding:0;
+		}
+		a,a:hover{
+			text-decoration:none;
+		}
+
+		li
+		{
+			list-style-type: none;
+		}
+
+		a
+		{
+			text-decoration: none;
+			outline: none;
+			blur: expression(this.onFocus=this.blur());
+		}
+
+		.clear
+		{
+			clear: both;
+		}
+
+		.ce
+		{
+			margin: 0;
+			display: block;
+			width: 200px;
+			color: black;
+			font-size: 14px;
+			/*position: fixed;*/
+			z-index: 5;
+			top: 0px;
+			left: 0px;
+			border-collapse: separate;
+			border-bottom: 1px solid #c62424;
+		}
+
+			.ce li
+			{
+				border-left: 1px solid #c62424;
+				border-top: 1px solid #c62424;
+				border-right: 1px solid #c62424;
+			}
+
+		.more
+		{
+			/*margin-left: 26px;
+			text-align:right;*/
+			position:absolute;
+			right:10px;
+		}
+
+		.ce li a
+		{
+			padding: 10px 10px 10px 40px;
+			color: black;
+			display: block;
+			cursor: pointer;
+			position:relative;
+		}
+
+			.ce li a:hover
+			{
+				background-color: #c62424;
+				color: white;
+				text-decoration:none;
+			}
+
+		.ce li .xz
+		{
+			background-color: #c62424;
+			color: white;
+			text-decoration:none;
+		}
+
+		.er
+		{
+			display: none;
+			width: 200px;
+			background: white;
+			color: black;
+		}
+
+			.er li
+			{
+				width: 197px;
+				/*border: solid rgb(140,140,140);*/
+				border: 1px solid #ddd;
+				border-width: 1px 1px 0px;
+			}
+
+				.er li a
+				{
+					display: block;
+					/*padding: 10px 10px 10px 50px;*/
+					color: black;
+					padding-left: 10px;
+					text-align: center;
+					background: white;
+					font-size: 13px;
+				}
+
+					.er li a:hover
+					{
+						background-color: #c62424;
+						color: white;
+					}

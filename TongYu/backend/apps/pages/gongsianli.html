@@ -1,0 +1,298 @@
+﻿<style type="text/css">
+    th.header, td.ng-binding {
+        text-align: left;
+    }
+
+    .ng-scope td {
+        text-align: left;
+    }
+</style>
+<!--<script src="../../../js/jquery-1.11.1.min.js"></script>-->
+<!--<script src="/backend/apps/js/hsFile.js" type="text/javascript"></script>-->
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        公司案例
+                    </h3>&nbsp;&nbsp;<button type="button" class="btn btn-primary" id="btnAdd">添加</button>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered" >
+                        <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>备注</td>
+                            <td>链接url</td>
+                            <td>图片预览</td>
+                            <td>创建时间</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody id="table1">
+                        
+                        </tbody>
+                        <!--<tr ng-repeat="e in $data">
+                            <td title="'连接地址'" style="text-align: left; width: 20%;">
+                                {{e.url}} filter="{ title: 'text'}" sortable="'title'"
+                            </td>
+                            <td title="'图片'" style="text-align: left;">
+                                <img width="80" height="60" src="../../../upload/{{e.photourl}}"/>
+                            </td>
+                            <td title="'创建时间'" style="text-align: left; width: 20%;">
+                                {{convertData(e.createdate)}}
+                            </td>
+                            <td title="'操作'" style="text-align: left; width: 25%;">
+                                <button type="button" class="btn btn-primary" ng-click="updategongsianli(e)">编辑</button>
+                                <button type="button" class="btn btn-primary" ng-click="deletegongsianli(e)">删除</button>
+                            </td>
+                        </tr>-->
+                    </table>
+                </div>
+            </div>
+
+            <input style="display: none;" id="picUpload" multiple="multiple" type="file" name="files" accept="image/gif,image/jpg,image/jpeg,image/png" />
+        </div>
+    </div>
+
+    <div id="loading" style="left: 45%; top: 30%; background: fixed; z-index: 1000; position: absolute; display: none;">
+        <img src="/backend/images/load_gif.gif" />
+    </div>
+
+    <div class="modal" id="divModalWindow" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="theModalLabel">公司案例</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">案例备注</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtRemark" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">链接地址</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="txtLink" />
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">图片</label>
+                            <div class="col-sm-10">
+                                <input id="picUpload" multiple="multiple" type="file" name="files" accept="image/gif,image/jpg,image/jpeg,image/png"/>
+                            </div>
+                        </div>
+                    </div>-->
+                    <!--<div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="bl-image" id="tj" onclick="Upload1();">
+
+                                    <img src="../../../upload/{{selected.photourl}}" alt="" style="margin-left: 102px; max-width: 260px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSave">保存 </button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    function normalValue(val) {
+        if (val === undefined || val === null) {
+            return "";
+        }
+        return val;
+    }
+    function get_img(photoUrl) {
+        if (photoUrl !== null && photoUrl !== undefined) {
+            return "<img width='200' height='120' src='../../../upload/" + photoUrl + "' />";
+        } else {
+            return "";
+        }
+    }
+    var arr = [];
+    var currentObj;
+    var currentId;
+    var mode = "";
+    function update_pic(id) {
+        console.log(id);
+        $("#picUpload").click();
+        currentId = id;
+    }
+    function edit(id) {
+        console.log("edit", id);
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].id === id) {
+                currentObj = arr[i];
+                break;
+            }
+        }
+
+        mode = "edit";
+        $("#txtRemark").val(currentObj.remark);
+        $("#txtLink").val(currentObj.url);
+    }
+    function delete_item(id)
+    {
+        if (confirm("确定要删除吗")) {
+            MyAjax("/api/Company/delete", {"":id}, function(res) {
+                console.log(res);
+                load();
+            });
+        }
+    }
+    function checkURL(URL){
+        var str=URL;
+        //判断URL地址的正则表达式为:http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?
+        //下面的代码中应用了转义字符"\"输出一个字符"/"
+        var Expression=/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/;
+        var objExp=new RegExp(Expression);
+        if(objExp.test(str)==true){
+            return true;
+        }else{
+            return false;
+        }
+    } 
+    function load() {
+        MyAjax("/api/Company/get_list", "", function (res) {
+            console.log(res);
+            arr = res;
+            var html = "";
+            for (var i = 0; i < res.length; i++) {
+                var item = res[i];
+
+                html += '<tr>';
+                html += '<td style="text-align:left;width:5%;">' + (i + 1) + '</td>';
+                html += '<td style="text-align: left; width: 10%;">' + normalValue(item.remark) + '</td>';
+                html += '<td style="text-align: left;width:10%;">' + normalValue(item.url) + '</td>';
+                html += '<td style="text-align: left; width: 30%;">' + get_img(item.photourl) + '<br/><button class="btn btn-primary" onclick="update_pic(' + item.id + ')">更改图片</button></td>';
+                html += '<td style="text-align: left; width: 10%;">' + item.createdate.substr(0, 10) + '</td>';
+                html += '<td style="text-align: left; width: 10%;"><button data-toggle="modal" data-target="#divModalWindow" class="btn btn-primary" onclick="edit(' + item.id + ')">编辑信息</button> <button class="btn btn-danger" onclick="delete_item(' + item.id + ')">删除</button>' + '</td>';
+                html += '</tr>';
+            }
+
+            $("#table1").html(html);
+        });
+    }
+
+    $(function() {
+
+        load();
+
+
+        $("#picUpload").on("change", function() {
+
+            var size = $("#picUpload")[0].files[0].size;
+            if (size > (3 * 1024 * 1024)) {
+                mymsg("您上传的图片不能大于3MB！");
+                return false;
+            }
+
+            //创建FormData对象
+            var data = new FormData();
+            //为FormData对象添加数据
+            data.append("files", $("#picUpload")[0].files[0]);
+            data.append("id", currentId);
+            //return;
+            $("#loading").show(); //显示加载图片
+
+            //return;
+            //发送数据
+            $.ajax({
+                url: '/api/PicUpload/upload',
+                type: 'POST',
+                data: data,
+                cache: false,
+                contentType: false, //不可缺参数
+                processData: false, //不可缺参数
+                success: function(data) {
+                    //data = $(data).html();
+                    console.log(data);
+
+                    mymsg("上传成功！");
+                    $("#loading").hide();
+                    //清空 input type=file的内容
+                    $("#picUpload").val("");
+
+                    load();
+
+                },
+                error: function(err) {
+                    //console.log(err);
+
+                    mymsg('上传出错,或文件格式不对！');
+                    $("#loading").hide();
+                }
+            });
+        });
+
+
+        $("#btnAdd").on("click", function() {
+            //$scope.compile = "添加";
+            mode = "add";
+            $("#divModalWindow").modal({ backdrop: 'static', keyboard: false });
+            $("#divModalWindow").modal("show");
+        });
+
+        //添加完后保存一个公司案例数据
+        $("#btnSave").on("click", function () {
+            var remark = $("#txtRemark").val();
+            var linkUrl = $("#txtLink").val();
+            console.log(remark, linkUrl);
+
+            //validate link 
+            if (linkUrl !== "") {
+                if (!checkURL(linkUrl)) {
+                    mymsg("不是合法的链接地址！");
+                    return;
+                }
+            }
+
+            if (mode === "add") {
+                $("#txtRemark").val("");
+                $("#txtLink").val("");
+                //return;
+                MyAjax("/api/Company/add_item", { remark: remark, link: linkUrl }, function(res) {
+                    console.log(res);
+                    if (res === 1) {
+                        $("#divModalWindow").modal("hide");
+                        load();
+                    }
+                });
+            }
+            else if (mode === "edit") {
+                MyAjax("/api/Company/update_item", { remark: remark, link: linkUrl,id:currentObj.id }, function (res) {
+                    console.log(res);
+                    if (res === 1) {
+                        $("#divModalWindow").modal("hide");
+                        load();
+                    }
+                });
+            }
+
+        });
+
+    });
+</script>
+
+</section>

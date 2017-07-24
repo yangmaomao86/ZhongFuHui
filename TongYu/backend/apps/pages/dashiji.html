@@ -1,0 +1,112 @@
+﻿<style type="text/css">
+    th.header, td.ng-binding {
+        text-align: left;
+    }
+
+    .ng-scope td {
+        text-align: left;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        统御大事记
+                    </h3>&nbsp;&nbsp;<button data-toggle="modal" data-target="#modal1" type="button" class="btn btn-primary" ng-click="adddashiji()">添加</button>
+                    <!--<a href="/handler/ExcelOut.aspx?page=bankcardlist" class="btn btn-primary">导出Excel</a>-->
+                </div>
+                <div class="box-body">
+                    <table ng-table="tableParams" class="table" show-filter="false">
+                        <tr ng-repeat="e in $data">
+                            <td title="'年份'" style="text-align: left; width: 50px;">
+                                {{e.year}}
+                            </td>
+                            <td title="'省份'" style="text-align: left; width: 50px;">
+                                {{shengfenzhuanhua(e.jiancheng)}}
+                            </td>
+                            <td title="'标题'" style="text-align: left; width: 20%;">
+                                {{e.title}}
+                            </td>
+                            <td title="'详细内容'" style="text-align: left;">
+                                {{ e.content}}
+                            </td>
+                            <td title="'创建时间'" style="text-align: left; width: 20%;">
+                                {{e.createdate.replace("T"," ").substr(0,19)}}
+                            </td>
+                            <td title="'操作'" style="text-align: left; width: 15%;">
+                                <button data-toggle="modal" data-target="#modal1" type="button" class="btn btn-primary" ng-click="updatedashiji(e)">修改</button>
+                                <button type="button" class="btn btn-primary" ng-click="deletedashiji(e)">删除</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div ng-show="loading" style="left: 45%; top: 30%; background: fixed; z-index: 1000; position: absolute;">
+        <img src="/backend/images/load_gif.gif" />
+    </div>
+
+
+    <div class="modal" id="modal1" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="theModalLabel">{{compile}}统御大事记</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">年份</label>
+                            <div class="col-sm-10">
+                                <!--<input type="text" class="form-control" ng-model="selected.year"/>-->
+                                <select ng-options="year for year in years" ng-model="selected.year" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">标题</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="selected.title"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">城市</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" ng-options="item.cha as item.name for item in citylist" ng-model="selected.jiancheng"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">详细内容</label>
+                            <div class="col-sm-10">
+                                <textarea ng-model="selected.content" class="form-control" style="width: 100%; min-height: 300px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="btnsave()">保存 </button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

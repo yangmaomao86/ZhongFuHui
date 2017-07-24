@@ -1,0 +1,105 @@
+﻿<style type="text/css">
+    th.header, td.ng-binding {
+        text-align: left;
+    }
+
+    .ng-scope td {
+        text-align: left;
+    }
+</style>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        招聘
+                    </h3>&nbsp;&nbsp;<a data-toggle="modal" data-target="#modal1" class="btn btn-primary" ng-click="add()">添加</a>
+                    <!--<a href="/handler/ExcelOut.aspx?page=bankcardlist" class="btn btn-primary">导出Excel</a>-->
+                </div>
+                <div class="box-body">
+                    <table ng-table="tableParams" class="table" show-filter="false">
+                        <tr ng-repeat="e in $data">
+                            <td title="'职位'" style="text-align: left;">
+                                {{e.Jobname}}
+                            </td>
+                            <td title="'要求'" style="text-align: left;">
+                                {{e.remark}}
+                            </td>
+                            <td title="'职位描述'" style="text-align: left;">
+                                {{(e.jobcontent)}}
+                            </td>
+                            <td title="'创建时间'" style="text-align: left;">
+                                {{e.createdate.replace("T"," ").substr(0,19)}}
+                            </td>
+                            <td class="test" title="'操作'" style="text-align: left;min-width: 120px; width: 120px;">
+                                <button data-toggle="modal" data-target="#modal1" type="button" class="btn btn-primary" ng-click="edit(e)">修改</button>
+                                <button type="button" class="btn btn-primary" ng-click="delete(e)">删除</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    <div ng-show="loading" style="left: 45%; top: 30%; background: fixed; z-index: 1000; position: absolute;">
+        <img src="/backend/images/load_gif.gif" />
+    </div>
+
+
+
+    <div class="modal" id="modal1" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>
+                            &times;
+                        </span>
+                    </button>
+                    <h4 class="modal-title" id="theModalLabel">{{mode==="add"?"添加":"编辑"}}招聘</h4>
+                    <!--<h4 class="modal-title">添加新员工</h4>-->
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">职位</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="selected.Jobname" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">要求</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="selected.remark"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">职位描述</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" rows="10" ng-model="selected.jobcontent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="save()">保存 </button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭 </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+

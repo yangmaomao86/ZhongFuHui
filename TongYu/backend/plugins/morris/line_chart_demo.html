@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<script src="../jQuery/jQuery-2.1.4.min.js"></script>
+	<link href="morris.css" rel="stylesheet" />
+	<script src="raphael-min.js"></script>
+	<script src="morris.js"></script>
+
+	
+</head>
+<body>
+
+	<div id="graph"></div>
+	<script type="text/javascript">
+	var day_data = [
+{ "period": "2015-01", "licensed": 3407, "sorned": 660 },
+{ "period": "2015-02", "licensed": 3351, "sorned": 629 },
+{ "period": "2015-03", "licensed": 3269, "sorned": 618 },
+{ "period": "2015-04", "licensed": 3246, "sorned": 661 },
+{ "period": "2015-05", "licensed": 3257, "sorned": 667 },
+{ "period": "2015-06", "licensed": 3248, "sorned": 627 },
+{ "period": "2015-07", "licensed": 3171, "sorned": 660 },
+{ "period": "2015-08", "licensed": 3171, "sorned": 676 },
+{ "period": "2015-09", "licensed": 3201, "sorned": 656 },
+{ "period": "2015-10", "licensed": 3215, "sorned": 622 }
+	];
+	Morris.Line({
+		element: 'graph',
+		data: day_data,
+		xkey: 'period',
+		ykeys: ['licensed', 'sorned'],
+		labels: ['Licensed', 'SORN']
+	});
+	</script>
+
+</body>
+</html>
